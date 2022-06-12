@@ -1,0 +1,73 @@
+spring:
+  profiles:
+    active: dev
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+server:
+  port: 8080
+
+#springdoc:
+#  version: '@project.version@'
+#  api-docs:
+#    path: /api-docs
+#  default-consumes-media-type: application/json
+#  default-produces-media-type: application/json
+#  swagger-ui:
+#    operations-sorter: alpha
+#    tags-sorter: alpha
+#    path: /swagger-ui.html
+#    disable-swagger-default-url: true
+#    display-query-params-without-oauth2: true
+#    doc-expansion: none
+#  paths-to-match:
+#    - /**
+
+security:
+  jwt:
+    token:
+      #secret-key 는 아무거나 적는건지.. 정해진 형식이 있는건지..
+      secret-key: 33F49GnCMS1mFYlGXisbUDzVf2ATWCl9
+      #30초마다 갱신? 되는건가??
+      expire-length: 30000000000
+  common:
+    algorithm: AES/CBC/PKCS5Padding
+    #여기도 비밀키가 있는데 무슨차이인건지
+    secret-key: wdZapJAc49ec6PEXg6W8apHfFwTY8Hos
+---
+#### develop profile file ###
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver   # 드라이버 설정
+    url: jdbc:mysql://dbtest.ctcuu8qorzll.ap-northeast-2.rds.amazonaws.com:3306/jpa_test?serverTimezone=Asia/Seoul
+    username: hello
+    password: hello1234!
+    initialization-mode: always
+    platform: mysql
+    sql-script-encoding: UTF-8
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 5000
+      connection-init-sql: SELECT 1
+      validation-timeout: 2000
+      minimum-idle: 10
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    open-in-view: false
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    # create: 기존테이블 삭제 후 다시 생성 (DROP + CREATE)
+    # create-drop: create 와 같으나 종료시점에 테이블 DROP
+    # update: 변경분만 반영(운영 DB 에서는 사용하면 안됨)
+    # validate: 엔티티와 테이블이 정상 매핑되었는지만 확인
+    # none: 사용하지 않음(사실상 없는 값이지만 관례상 none 이라고 한다.)
+    hibernate:
+      ddl-auto: update  # 개발 환경
+    generate-ddl: true
+    show-sql: true
+    properties.hibernate.format_sql: true
